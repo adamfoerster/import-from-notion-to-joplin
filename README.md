@@ -9,9 +9,14 @@ Export a notebook in Notion with the "Export Markdown and CSV" option.
 
 Unzip and move the content of folder named after the notebook to the folder where the notion-import.sh script is.
 
-Create a notebook in Joplin with `joplin mkbook <name_of_your_notebook>`.
+Create a notebook in Joplin with 
+```joplin mkbook <name_of_your_notebook>```
 
-Write down the hash of the notebook you just created. To list all the notebooks with their hashes use `joplin ls / -l`. The hash is the first column (a 5 character random string). To see only the hash run `joplin ls / -l | grep <name_of_the_notebook> | awk '{print $1}'`, but you need to have awk installed.
+Write down the hash of the notebook you just created. To list all the notebooks with their hashes use 
+```joplin ls / -l```
+The hash is the first column (a 5 character random string). To see only the hash run 
+```joplin ls / -l | grep <name_of_the_notebook> | awk '{print $1}'```
+but you need to have awk installed.
 
 Finally run the script with:
 ```
