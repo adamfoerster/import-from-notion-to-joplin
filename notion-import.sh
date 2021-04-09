@@ -8,6 +8,7 @@ function get_notes_list {
 
 function go_thru_notes {
   z=0
+  touch newnames.sh
   while read note; do
     let "z=z+1"
     extract_hash_name "$note"
@@ -32,5 +33,7 @@ function extract_hash_name {
   echo "renaming $notehash to $newname"
   echo "joplin ren $notehash \"$newname\"" >> newnames.sh
 }
+
+# execute
 get_notes_list $1
 go_thru_notes

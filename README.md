@@ -5,16 +5,11 @@ Firstly clone this project or download the `notion-import.sh` file to a folder.
 
 You must download and install the [terminal version of joplin](https://joplinapp.org/terminal/). Make sure it is in your PATH (to certify you can run `joplin help`.
 
-Export a notebook in Notion with the **Export Markdown and CSV** option.
+Export a notebook in Notion with the **Export Markdown and CSV** option and check the **Include subpages** option.
 
-Unzip and move the content of folder named after the notebook to the folder where the notion-import.sh script is.
+Unzip and move the content of folder named after the notebook and import it via File > Import > MD-Markdown(Directory). This will create a notebook with the notes inside it.
 
-Create a notebook in Joplin with 
-```
-joplin mkbook <name_of_your_notebook>
-```
-
-Write down the hash of the notebook you just created. To list all the notebooks with their hashes use 
+Write down the hash of the notebook you just created during the import. To list all the notebooks with their hashes use 
 ```
 joplin ls / -l
 ```
