@@ -19,4 +19,5 @@ Finally run the script with:
 ./notion-import.sh "/home/adam/export.zip" "My New Notebook"
 ```
 In this example we consider that I have downloaded the export file to `/home/adam/export.zip` and that I want to name my new notebook as **My New Notebook**.
+
 Currently this script does not import images and other forms of attachments.
