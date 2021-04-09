@@ -30,7 +30,7 @@ function extract_hash_name {
     fi
   done
   echo "renaming $notehash to $newname"
-  echo "joplin ren $notehash $newname" >> newnames.sh
+  echo "joplin ren $notehash \"$newname\"" >> newnames.sh
 }
 get_notes_list $1
 go_thru_notes
