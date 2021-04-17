@@ -29,6 +29,7 @@ function import_notes {
   for md in "${md_list[@]}"; do
     notename=${md//[$'\t\r\n']}
     notename=$(echo $notename | sed -r "s/'//g")
+    newnotename=$(remove_hash $notename)
     joplin import "$notename" "$notebook_name"
   done
   IFS=' '
@@ -38,35 +39,52 @@ function import_notes {
 # read all notes in a notebook
 function get_notes_list {
   joplin use "$1"
-  joplin ls -l > notes.txt
+  joplin ls -l > /tmp/notes.txt
 }
 
 function go_thru_notes {
   z=0
-  touch newnames.sh
+  echo "" > /tmp/newnames.sh
   while read note; do
     let "z=z+1"
     extract_hash_name "$note"
-  done < notes.txt
-  chmod +x ./newnames.sh
-  ./newnames.sh
+  done < /tmp/notes.txt
+  chmod +x /tmp/newnames.sh
+  /tmp/newnames.sh
 }
 
-function extract_hash_name {
+function remove_hash {
+  echo $1
   strlen=${#1}
-  read -ra my_array <<< "$1"
+  IFS=" " read -ra my_array <<< "$1"
   arraylen=${#my_array[@]}
   notehash=${my_array[0]}
   newname=""
   cont=0
   for i in "${my_array[@]}"; do
     let "cont=cont+1"
-    if [[ $cont>3 && $cont<$arraylen ]]; then
+    if [[ $cont -lt $arraylen ]]; then
+      newname+="$i "
+    fi
+  done
+  echo $newname
+}
+
+function extract_hash_name {
+  strlen=${#1}
+  IFS=" " read -ra my_array <<< "$1"
+  arraylen=${#my_array[@]}
+  notehash=${my_array[0]}
+  newname=""
+  cont=0
+  for i in "${my_array[@]}"; do
+    let "cont=cont+1"
+    if [[ $cont -gt 3 && $cont -lt $arraylen ]]; then
       newname+="$i "
     fi
   done
   echo "renaming $notehash to $newname"
-  echo "joplin ren $notehash \"$newname\"" >> newnames.sh
+  echo "joplin ren $notehash \"$newname\"" >> /tmp/newnames.sh
 }
 
 # execute
