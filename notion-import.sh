@@ -6,14 +6,7 @@ set -e
 trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 
 
-function unzip_notion_export {
-  export_folder="notion-export-$(date +%s)"
-  mkdir -p "/tmp/$export_folder"
-  cp $1 "/tmp/$export_folder/export.zip"
-  cd "/tmp/$export_folder"
-  unzip -o export.zip
-}
-
+# 
 function import_notes {
   unziped_folder=$(ls -I '*.*')
   notebook_name=''
@@ -22,6 +15,7 @@ function import_notes {
   else
     notebook_name=$unziped_folder
   fi
+  echo "the notebook_name will be $notebook_name"
   cd "$unziped_folder"
   joplin mkbook "$notebook_name"
   joplin use "$notebook_name"
@@ -30,7 +24,11 @@ function import_notes {
     notename=${md//[$'\t\r\n']}
     notename=$(echo $notename | sed -r "s/'//g")
     newnotename=$(remove_hash $notename)
-    joplin import "$notename" "$notebook_name"
+    if [[ $(joplin import "$notename" "$notebook_name") ]]; then
+      echo "note $notename imported to $notebook_name"
+    else
+      echo "one note skipped"
+    fi
   done
   IFS=' '
   echo "All notes imported to $notebook_name"
@@ -38,6 +36,7 @@ function import_notes {
 
 # read all notes in a notebook
 function get_notes_list {
+  echo "using notebook $1"
   joplin use "$1"
   joplin ls -l > /tmp/notes.txt
 }
@@ -48,6 +47,7 @@ function go_thru_notes {
   while read note; do
     let "z=z+1"
     extract_hash_name "$note"
+    import_attachments "$note"
   done < /tmp/notes.txt
   chmod +x /tmp/newnames.sh
   /tmp/newnames.sh
@@ -87,8 +87,13 @@ function extract_hash_name {
   echo "joplin ren $notehash \"$newname\"" >> /tmp/newnames.sh
 }
 
+function import_attachments {
+  echo "importing attachments from $1"
+}
+
 # execute
-unzip_notion_export $1
-import_notes "$2"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+bash $SCRIPT_DIR/unzip-notion-export.sh $1
+bash $SCRIPT_DIR/import-notes.sh "$2"
 get_notes_list "$2"
 go_thru_notes
