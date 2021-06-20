@@ -11,12 +11,8 @@ trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 # ARGS 1:zipfile_path
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 unziped_folder=$(ls -I '*.*')
-notebook_name=''
-if [[ $1 ]]; then
-  notebook_name=$1
-else
-  notebook_name=$unziped_folder
-fi
+echo "I will use $1"
+notebook_name="$1"
 echo "the notebook_name will be $notebook_name"
 cd "$unziped_folder"
 joplin mkbook "$notebook_name"
