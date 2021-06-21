@@ -19,4 +19,4 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 bash $SCRIPT_DIR/unzip-notion-export.sh "$1"
 bash $SCRIPT_DIR/import-notes.sh "$notebook_name"
 bash $SCRIPT_DIR/get-notes-list.sh "$notebook_name"
-bash $SCRIPT_DIR/go-thru-notes.sh
+bash $SCRIPT_DIR/go-thru-notes.sh "$notebook_name"
